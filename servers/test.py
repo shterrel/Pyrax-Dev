@@ -45,12 +45,13 @@ img_id = cs.servers.create_image(server_id, nm)
 
 print("Image '%s' is being created. Its ID is: %s" % (nm, img_id))
 
+img = pyrax.cloudservers.images.get(nm)
 while img.status != "ACTIVE":
-time.sleep(60)
-img = pyrax.cloudservers.images.get(new_img)
-print "...still waiting"
+	time.sleep(60)
+	img = pyrax.cloudservers.images.get(nm)
+	print "...still waiting"
 
-
+print("Image created.")
 import os
 import pyrax
 
