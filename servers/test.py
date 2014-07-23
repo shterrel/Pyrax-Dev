@@ -20,6 +20,7 @@ from __future__ import print_function
 
 import os
 import pyrax
+import time
 
 pyrax.set_setting("identity_type", "rackspace")
 creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
