@@ -54,12 +54,7 @@ while img.status != "ACTIVE":
 	print("...still waiting")
 
 print("-Image created.")
-#import os
-#import pyrax
 
-#pyrax.set_setting("identity_type", "rackspace")
-#creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
-#pyrax.set_credential_file(creds_file)
 imgs = pyrax.images
 cf = pyrax.cloudfiles
 
@@ -108,4 +103,5 @@ answer = raw_input("Do you want to track the task until completion? This may "
         "take several minutes. [y/N]: ")
 if answer and answer[0].lower() == "y":
     pyrax.utils.wait_until(task, "status", ["success", "failure"],
-            verbose=True, interval=30)
+            verbose=True, interval=30
+)
