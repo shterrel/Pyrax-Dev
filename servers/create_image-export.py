@@ -22,7 +22,7 @@ import os
 import pyrax
 
 pyrax.set_setting("identity_type", "rackspace")
-creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+creds_file = os.path.expanduser("/root/.rackspace_cloud_credentials")
 pyrax.set_credential_file(creds_file)
 cs = pyrax.cloudservers
 servers = cs.servers.list()
@@ -48,6 +48,7 @@ print("Image '%s' is being created. Its ID is: %s" % (nm, img_id))
 print("You will need to select an image to export, and a Container into which "
         "the exported image will be placed.")
 images = imgs.list(visibility="private")
+
 print()
 print("Select an image to export:")
 for pos, image in enumerate(images):
@@ -72,3 +73,22 @@ for pos, cont in enumerate(conts):
     print("[%s] %s" % (pos, cont.name))
 snum = raw_input("Enter the number of the container: ")
 if not snum:
+	exit()
+try:
+    num = int(snum)
+except ValueError:
+    print("'%s' is not a valid number." % snum)
+    exit()
+if not 0 <= num < len(conts):
+    print("'%s' is not a valid container number." % snum)
+    exit()
+cont = conts[num]
+
+task = imgs.export_task(image, cont)
+print("Task ID=%s" % task.id)
+print()
+answer = raw_input("Do you want to track the task until completion? This may "
+        "take several minutes. [y/N]: ")
+if answer and answer[0].lower() == "y":
+    pyrax.utils.wait_until(task, "status", ["success", "failure"],
+            verbose=True, interval=30)

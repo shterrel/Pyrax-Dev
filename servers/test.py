@@ -57,29 +57,19 @@ print("Image created.")
 pyrax.set_default_region("DFW")
 pyrax.set_setting("identity_type", "rackspace")
 pyrax.set_credential_file("/root/.rackspace_cloud_credentials")
-# not needed
-#cf = pyrax.cloudfiles
+
 cf_dfw = pyrax.connect_to_cloudfiles("DFW")
 
-# this was the problem
-#cont = cf.create_container("Export")
 cont = cf_dfw.create_container("Export")
 
 cf_dfw.make_container_public("Export", ttl=900)
 
 pyrax.set_default_region("IAD")
 
-#cf = pyrax.cloudfiles
 cf_iad = pyrax.connect_to_cloudfiles("IAD")
 
 cont = cf_iad.create_container("Import")
 cf_iad.make_container_public("Import", ttl=900)
-#import os
-#import pyrax
-
-#pyrax.set_setting("identity_type", "rackspace")
-#creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
-#pyrax.set_credential_file(creds_file)
 imgs = pyrax.images
 cf = pyrax.cloudfiles
 
