@@ -23,7 +23,7 @@ import pyrax
 import time
 
 pyrax.set_setting("identity_type", "rackspace")
-creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+creds_file = os.path.expanduser("/root/.rackspace_cloud_credentials")
 pyrax.set_credential_file(creds_file)
 cs = pyrax.cloudservers
 servers = cs.servers.list()
@@ -47,14 +47,39 @@ img_id = cs.servers.create_image(server_id, nm)
 print("Image '%s' is being created. Its ID is: %s" % (nm, img_id))
 
 img = pyrax.cloudservers.images.get(img_id)
-
 while img.status != "ACTIVE":
-	time.sleep(60)
-	img = pyrax.cloudservers.images.get(img_id)
-	print("...still waiting")
+     time.sleep(60)
+     img = pyrax.cloudservers.images.get(img_id)
+     print ("...still waiting")
 
-print("-Image created.")
+print("Image created.")
 
+pyrax.set_default_region("DFW")
+pyrax.set_setting("identity_type", "rackspace")
+pyrax.set_credential_file("/root/.rackspace_cloud_credentials")
+# not needed
+#cf = pyrax.cloudfiles
+cf_dfw = pyrax.connect_to_cloudfiles("DFW")
+
+# this was the problem
+#cont = cf.create_container("Export")
+cont = cf_dfw.create_container("Export")
+
+cf_dfw.make_container_public("Export", ttl=900)
+
+pyrax.set_default_region("IAD")
+
+#cf = pyrax.cloudfiles
+cf_iad = pyrax.connect_to_cloudfiles("IAD")
+
+cont = cf_iad.create_container("Import")
+cf_iad.make_container_public("Import", ttl=900)
+#import os
+#import pyrax
+
+#pyrax.set_setting("identity_type", "rackspace")
+#creds_file = os.path.expanduser("~/.rackspace_cloud_credentials")
+#pyrax.set_credential_file(creds_file)
 imgs = pyrax.images
 cf = pyrax.cloudfiles
 
@@ -103,5 +128,4 @@ answer = raw_input("Do you want to track the task until completion? This may "
         "take several minutes. [y/N]: ")
 if answer and answer[0].lower() == "y":
     pyrax.utils.wait_until(task, "status", ["success", "failure"],
-            verbose=True, interval=30
-)
+            verbose=True, interval=30)
