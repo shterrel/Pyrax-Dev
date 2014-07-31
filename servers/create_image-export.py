@@ -20,6 +20,7 @@ from __future__ import print_function
 
 import os
 import pyrax
+import time
 
 pyrax.set_setting("identity_type", "rackspace")
 creds_file = os.path.expanduser("/root/.rackspace_cloud_credentials")
@@ -44,6 +45,32 @@ nm = raw_input("Enter a name for the image: ")
 img_id = cs.servers.create_image(server_id, nm)
 
 print("Image '%s' is being created. Its ID is: %s" % (nm, img_id))
+img = pyrax.cloudservers.images.get(img_id)
+while img.status != "ACTIVE":
+     time.sleep(60)
+     img = pyrax.cloudservers.images.get(img_id)
+     print ("...still waiting")
+
+print("Image created.")
+
+pyrax.set_default_region("DFW")
+pyrax.set_setting("identity_type", "rackspace")
+pyrax.set_credential_file("/root/.rackspace_cloud_credentials")
+
+cf_dfw = pyrax.connect_to_cloudfiles("DFW")
+
+cont = cf_dfw.create_container("Export")
+
+cf_dfw.make_container_public("Export", ttl=900)
+
+pyrax.set_default_region("IAD")
+
+cf_iad = pyrax.connect_to_cloudfiles("IAD")
+
+cont = cf_iad.create_container("Import")
+cf_iad.make_container_public("Import", ttl=900)
+imgs = pyrax.images
+cf = pyrax.cloudfiles
 
 print("You will need to select an image to export, and a Container into which "
         "the exported image will be placed.")
