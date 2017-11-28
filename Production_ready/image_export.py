@@ -127,7 +127,7 @@ if region == "IAD":
 
     print("Image created.")
     cont = cf_iad.create_container("Export")
-    cf_iad.make_container_public("Export", ttl=900)
+    cf_iad.make_container_public("Export", ttl=str(900))
     print("You will need to select an image to export, and a Container into which "
             "the exported image will be placed.")
     images = imgs_iad.list(visibility="private")
@@ -204,7 +204,7 @@ if region == "ORD":
 
     print("Image created.")
     cont = cf_ord.create_container("Export")
-    cf_ord.make_container_public("Export", ttl=900)
+    cf_ord.make_container_public("Export", ttl=str(900))
     print("You will need to select an image to export, and a Container into which "
             "the exported image will be placed.")
     images = imgs_ord.list(visibility="private")
