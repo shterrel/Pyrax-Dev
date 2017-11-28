@@ -5,7 +5,7 @@ import time
 
 un=raw_input('Enter your username : ')
 API_Key=raw_input('Enter your API Key : ')
-region=raw_input('What datacenter is your server in? : ')
+region=raw_input('What datacenter is your server in? : ').upper()
 pyrax.set_setting("identity_type", "rackspace")
 pyrax.set_credentials(un, API_Key)
 
@@ -50,7 +50,7 @@ if region == "DFW":
 
     print("Image created.")
     cont = cf_dfw.create_container("Export")
-    cf_dfw.make_container_public("Export", ttl=900)
+    cf_dfw.make_container_public("Export", ttl=str(900))
     print("You will need to select an image to export, and a Container into which "
             "the exported image will be placed.")
     images = imgs_dfw.list(visibility="private")
@@ -254,4 +254,3 @@ if region == "ORD":
     if answer and answer[0].lower() == "y":
         pyrax.utils.wait_until(task, "status", ["success", "failure"],
                 verbose=True, interval=30)
-
