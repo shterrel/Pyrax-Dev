@@ -4,9 +4,10 @@ import os
 import pyrax
 import time
 
+# Input cloud account information
 un=raw_input('Enter your username : ')
 API_Key=raw_input('Enter your API Key : ')
-region=raw_input('What datacenter is your server in? : ')
+region=raw_input('What datacenter is your server in? : ').upper()
 pyrax.set_setting("identity_type", "rackspace")
 pyrax.set_credentials(un, API_Key)
 
@@ -97,7 +98,7 @@ if region == "IAD":
         else:
             print("Image import failed!")
             print("Reason: %s" % task.message)
-            
+
 if region == "DFW":
     print("You will need an image file stored in a Cloud Files container.")
     conts = cf_dfw.list()
@@ -170,7 +171,7 @@ if region == "DFW":
         else:
             print("Image import failed!")
             print("Reason: %s" % task.message)
-            
+
 if region == "ORD":
     print("You will need an image file stored in a Cloud Files container.")
     conts = cf_ord.list()
@@ -243,5 +244,3 @@ if region == "ORD":
         else:
             print("Image import failed!")
             print("Reason: %s" % task.message)
-
-

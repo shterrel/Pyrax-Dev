@@ -1,3 +1,3 @@
 #turbolift commnads to clone a container from one DC to another, this is across same DDI
 
-turbolift -u davi5652 -a d0cf0ae5007b421ba7371d9a7c469953 --os-auth-url dfw clone -sc Export -tc Import -tr iad
+turbolift -u {username} -a {api key} --os-auth-url {datacenter} clone -sc Export -tc Import -tr iad

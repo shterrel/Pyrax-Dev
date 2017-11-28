@@ -2,7 +2,7 @@ from __future__ import print_function
 
 import pyrax
 import time
-
+# Input cloud account information
 un=raw_input('Enter your username : ')
 API_Key=raw_input('Enter your API Key : ')
 region=raw_input('What datacenter is your server in? : ').upper()
